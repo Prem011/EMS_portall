@@ -8,13 +8,12 @@ import { useForm } from 'react-hook-form';
 
 const UpdateEmployee = () => {
   const [imagePreview, setImagePreview] = useState(null); // State to hold image preview
-  const { id } = useParams(); // Get employee ID from URL
+  const { id } = useParams(); 
   const navigate = useNavigate();
   
   const { register, handleSubmit, setValue, formState: { errors } } = useForm();
   const [serverError, setServerError] = useState('');
 
-  // Fetch the employee details on component mount
   useEffect(() => {
     const fetchEmployee = async () => {
       try {
@@ -23,14 +22,6 @@ const UpdateEmployee = () => {
           const employee = response.data.employee;
           // Set form values
           Object.keys(employee).forEach(key => setValue(key, employee[key]));
-
-        // setValue('name', data.name);
-                // setValue('email', data.email);
-                // setValue('mobile', data.mobile);
-                // setValue('designation', data.designation);
-                // setValue('gender', data.gender);
-                // setValue('course', data.course);
-                // setImagePreview(`http://localhost:4001/${data.image}
 
         }
       } catch (error) {
@@ -45,7 +36,7 @@ const UpdateEmployee = () => {
   const onSubmit = async (data) => {
     try {
       await axios.post(`/api/employees/updateEmployee/${id}`, data);
-      navigate('/employeesDetails'); // Redirect to employees list after successful update
+      navigate('/employeesDetails'); 
     } catch (error) {
       console.error('Error updating employee:', error);
       setServerError('Error updating employee. Please check the details and try again.');
@@ -57,110 +48,7 @@ const UpdateEmployee = () => {
   };
 
   return (
-    // <div className="w-screen h-screen bg-zinc-800 flex  justify-center items-center">
-
-    //       {/* {serverError && <p className="text-red-500">{serverError}</p>} */}
-
-    //   <form onSubmit={handleSubmit(onSubmit)} className=" w-[50%] px-10 py-6 mt-6 space-y-4">
-    //   <h2 className="text-2xl font-bold text-white text-center pt-9">Update Employee Details</h2>
-    //     <div>
-    //       <label className='text-white' >Name</label>
-    //       <input
-    //         type="text"
-    //         {...register('name', { required: 'Name is required' })}
-    //         className="border p-2 w-full"
-    //         />
-    //         {serverError.name && <p className="text-red-500">{serverError.name.message}</p>}
-    //       {errors.name && <p className="text-red-500">{errors.name.message}</p>}
-    //     </div>
-
-    //     <div>
-    //       <label className='text-white' >Email</label>
-    //       <input
-    //         type="email"
-    //         {...register('email', { 
-    //             required: 'Email is required',
-    //             pattern: { value: /^\S+@\S+$/, message: 'Invalid email format' }
-    //         })}
-    //         className="border p-2 w-full"
-    //         />
-    //         {serverError.email && <p className="text-red-500">{serverError.email.message}</p>}
-    //       {errors.email && <p className="text-red-500">{errors.email.message}</p>}
-    //     </div>
-
-    //     <div>
-    //       <label className='text-white' >Mobile</label>
-    //       <input
-    //         type="text"
-    //         {...register('mobile', { 
-    //           required: 'Mobile is required',
-    //           minLength: { value: 10, message: 'Mobile number must be at least 10 digits long' }
-    //         })}
-    //         className="border p-2 w-full"
-    //       />
-    //         {serverError.mobile && <p className="text-red-500">{serverError.mobile.message}</p>}
-    //       {errors.mobile && <p className="text-red-500">{errors.mobile.message}</p>}
-    //     </div>
-
-    //     <div>
-    //       <label className='text-white' >Designation</label>
-    //       <input
-    //         type="text"
-    //         {...register('designation', { required: 'Designation is required' })}
-    //         className="border p-2 w-full"
-    //       />
-    //         {serverError.designation && <p className="text-red-500">{serverError.designation.message}</p>}
-    //       {errors.designation && <p className="text-red-500">{errors.designation.message}</p>}
-    //     </div>
-
-    //     <div>
-    //       <label className='text-white' >Gender</label>
-    //       <select
-    //         {...register('gender', { required: 'Gender is required' })}
-    //         className="border p-2 w-full"
-    //       >
-    //         <option value="Male">Male</option>
-    //         <option value="Female">Female</option>
-    //         <option value="Others">Others</option>
-    //       </select>
-    //       {serverError.gender && <p className="text-red-500">{serverError.gender.message}</p>}
-    //       {errors.gender && <p className="text-red-500">{errors.gender.message}</p>}
-    //     </div>
-
-    //     <div className='text-white' >
-    //       <label>Course</label>
-    //       <input
-    //         type="text"
-    //         {...register('course', { required: 'Course is required' })}
-    //         className="border p-2 w-full"
-    //       />
-    //       {errors.course && <p className="text-red-500">{errors.course.message}</p>}
-    //     </div>
-
-    //     <div className='text-white' >
-    //       <label>Image</label>
-    //       <input
-    //         type="text"
-    //         {...register('image')}
-    //         className="border p-2 w-full"
-    //       />
-    //     </div>
-
-    //     <div className='text-white' >
-    //       {/* <label>Active</label> */}
-    //       <input
-    //         type="checkbox"
-    //         {...register('active')}
-    //         className="mr-2"
-    //       />
-    //       Active
-    //     </div>
-
-    //     <button type="submit" className="bg-blue-500 text-white p-2">
-    //       Update Employee
-    //     </button>
-    //   </form>
-    // </div>
+ 
      <div className='w-screen h-screen bg-zinc-800'>
             <button className='bg-zinc-200 px-3 py-2 rounded-md m-6' onClick={handleBackClick} >Back</button>
             <div className='h-[90%] rounded-md text-white flex justify-center items-center px-6 py-4'>

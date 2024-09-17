@@ -8,7 +8,6 @@ import CreateEmployee from './employeesComponent/CreateEmployee'
 import UpdateEmployee from './employeesComponent/UpdateEmployee'
 import { useAuth } from './context/AuthProvider'
 
-// Protected Route Component
 const ProtectedRoute = ({ element, ...rest }) => {
     const { authUser } = useAuth();
     return authUser ? element : <Navigate to="/login" />;

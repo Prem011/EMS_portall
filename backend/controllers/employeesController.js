@@ -45,7 +45,8 @@ exports.createEmployee = [
               designation,
               gender,
               course,
-              image: req.file ? req.file.path : null // Store file path if uploaded
+              image: req.file ? req.file.path : null 
+              // Store file path if uploaded
           });
 
           await newEmployee.save();
@@ -114,10 +115,8 @@ exports.readEmployee = async (req, res) => {
 
 exports.updateEmployee = [
 
-    // File upload middleware
     upload.single('image'),
   
-    // Validation middleware
     body('name').isLength({ min: 1 }).withMessage('Name is required.'),
     body('email').isEmail().withMessage('Invalid email format.'),
     body('mobile').isLength({ min: 10 }).withMessage('Mobile number must be at least 10 digits long.'),
@@ -125,31 +124,24 @@ exports.updateEmployee = [
     body('gender').isIn(['Male', 'Female', 'Others']).withMessage('Invalid gender.'),
     body('course').isIn(['MCA', 'BCA', 'BSC']).withMessage('Invalid course.'),
   
-    // Main request handler
     async (req, res) => {
-      // Check for validation errors
       const errors = validationResult(req);
       if (!errors.isEmpty()) {
         return res.status(400).json({ errors: errors.array() });
       }
   
-      // Multer error handling
       if (req.fileValidationError) {
         return res.status(400).json({ error: req.fileValidationError });
       }
   
-      // Extract data from request
       const { name, email, mobile, designation, gender, course } = req.body;
   
-      // Ensure unique email and mobile, excluding the current employee being updated
       try {
-        // Find the employee by username in the request params
         const existingEmployee = await Employee.findOne({ username: req.params.username });
         if (!existingEmployee) {
           return res.status(404).json({ error: "Employee not found." });
         }
   
-        // Check for duplicate email and mobile, excluding the current employee
         const existingEmployeeByEmail = await Employee.findOne({ email, _id: { $ne: existingEmployee._id } });
         const existingEmployeeByMobile = await Employee.findOne({ mobile, _id: { $ne: existingEmployee._id } });
   
@@ -160,7 +152,6 @@ exports.updateEmployee = [
           return res.status(400).json({ error: "Mobile number already exists." });
         }
   
-        // Update employee data
         existingEmployee.name = name;
         existingEmployee.email = email;
         existingEmployee.mobile = mobile;
@@ -168,19 +159,15 @@ exports.updateEmployee = [
         existingEmployee.gender = gender;
         existingEmployee.course = course;
   
-        // Update image if a new one is uploaded
         if (req.file) {
           existingEmployee.image = req.file.path; // Update image path if a new image is uploaded
         }
   
-        // Save updated employee
         await existingEmployee.save();
   
-        // Send success response
         return res.status(200).json({ message: "Employee updated successfully", employee: existingEmployee });
   
       } catch (error) {
-        // Handle server errors
         console.log("Error while updating employee:", error);
         return res.status(500).json({ error: "Server error, please try again later.", error: error.message });
       }
@@ -249,7 +236,6 @@ exports.getSingleEmployee = async(req, res) => {
   try {
 
     const employee = await Employee.findById(req.params.id);
-    // const employee = await Employee.findOne({ id: req.params.id });
     
     if (!employee) {
       return res.status(404).json({ error: 'Employee not found' });

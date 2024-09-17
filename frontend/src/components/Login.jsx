@@ -21,10 +21,8 @@ const Login = () => {
                 withCredentials: true, // Include cookies if needed
             });
 
-            // Check if the response status is 200
             if (response.status === 200) {
                 toast.success('Login successful');
-                // Cookies.set('jwt', response.data.user.jwt, { expires: 1 });
                 localStorage.setItem('EMS', JSON.stringify(response.data.user.username));
                 const user = response.data.user;
                 login(user); 
@@ -32,24 +30,19 @@ const Login = () => {
                 // console.log(response.data.user); 
 
             } else {
-                // Handle unexpected status codes
                 toast.error('Unexpected response from the server');
                 console.log('Unexpected response from the server');
             }
         } catch (error) {
-            // Enhanced error handling
             if (error.response) {
-                // Server responded with a status code other than 2xx
                 if (error.response.data && error.response.data.error) {
                     toast.error(`Error: ${error.response.data.error}`);
                 } else {
                     toast.error('Server error occurred. Please try again.');
                 }
             } else if (error.request) {
-                // Request was made but no response received
                 toast.error('No response received from server. Please try again.');
             } else {
-                // Other errors
                 toast.error("error occurred");
                 console.log(error);
             }

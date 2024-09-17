@@ -8,11 +8,10 @@ const EmployeesList = () => {
   const [employees, setEmployees] = useState([]);
 
   useEffect(() => {
-    // Fetch employee data from the actual API endpoint
     const fetchEmployees = async () => {
       try {
         const response = await axios.get('/api/employees/employeeData');
-        // Access the employee array correctly from the response
+        
         const employeeData = Array.isArray(response.data.data) ? response.data.data : [];
         setEmployees(employeeData);
       } catch (error) {
@@ -29,6 +28,7 @@ const EmployeesList = () => {
     try {
       const response = await axios.post(`http://localhost:4001/employees/deleteEmployee/${employeeId}`);
       // console.log('Employee deleted:', response.data);
+      
       toast.error("Employee Deleted successfully", response.data);
       setEmployees(employees.filter(employee => employee._id !== employeeId));
     } catch (error) {

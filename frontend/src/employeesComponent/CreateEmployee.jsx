@@ -19,7 +19,6 @@ const CreateEmployee = () => {
 
     const onSubmit = async (data) => {
         try {
-            // Create FormData to handle file upload
             const formData = new FormData();
             formData.append('image', data.image[0]);
             formData.append('name', data.name);
@@ -29,15 +28,14 @@ const CreateEmployee = () => {
             formData.append('gender', data.gender);
             formData.append('course', data.course);
 
-            // Send POST request to create a new employee
             const response = await axios.post('/api/employees/createEmployee', formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data',
                 },
             });
             // console.log('Employee created successfully:', response.data);
-            reset(); // Reset form after successful submission
-            setImagePreview(null);// Clear image preview
+            reset();
+            setImagePreview(null);
             toast.success("Employee Added successfully")
         } catch (error) {
             console.error('Error creating employee:'+ error);
@@ -65,7 +63,6 @@ const CreateEmployee = () => {
 
 
                 <form onSubmit={handleSubmit(onSubmit)} className='w-[40%] my-2 px-10 py-8 rounded-md border border-spacing-3' encType='multipart/form-data'>
-                    {/* Image Preview Section */}
                     {imagePreview && (
                         <div className="mt-4">
                             <h4 className="text-white mb-2">Image Preview:</h4>

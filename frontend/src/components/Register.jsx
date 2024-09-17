@@ -6,7 +6,7 @@ import { toast } from 'react-toastify';
 import axios from 'axios';
 
 const Register = () => {
-    const { login } = useAuth(); // Destructure login function from useAuth
+    const { login } = useAuth();
 
     const { register, handleSubmit, formState: { errors } } = useForm();
 
