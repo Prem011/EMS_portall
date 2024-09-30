@@ -31,6 +31,8 @@ const AuthProvider = ({children}) => {
     };
     
 
+
+
     const logout = () => {
         setAuthUser(null);
         localStorage.removeItem("EMS");

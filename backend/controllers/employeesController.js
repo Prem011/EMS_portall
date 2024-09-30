@@ -1,63 +1,156 @@
 const { error } = require("console");
 const Employee = require("../models/employeeSchema")
-const upload = require("../utils/multer")
+// const upload = require("../utils/multer")
 const { body, validationResult } = require('express-validator');
 const path = require("path");
+const Upload = require("../utils/cloudinary");
+const cloudinary = require('cloudinary').v2;
+
+
+
+// exports.createEmployee = [
+
+//     // upload.single('image'),
+//     // body('name').isLength({ min: 1 }).withMessage('Name is required.'),
+//     // body('email').isEmail().withMessage('Invalid email format.'),
+//     // body('mobile').isLength({ min: 10 }).withMessage('Mobile number must be at least 10 digits long.'),
+//     // body('designation').isIn(['HR', 'Manager', 'sales']).withMessage('Invalid designation.'),
+//     // body('gender').isIn(['Male', 'Female', 'Others']).withMessage('Invalid gender.'),
+//     // body('course.*').isIn(['MCA', 'BCA', 'BSC']).withMessage('Invalid course.'), // Validate each course in the array
+
+//     async (req, res) => {
+//         const errors = validationResult(req);
+//         // if (!errors.isEmpty()) {
+//         //     return res.status(400).json({ errors: errors.array() });
+//         // }
+
+//         // if (req.fileValidationError) {
+//         //     return res.status(400).json({ error: req.fileValidationError });
+//         // }
+
+//         // if (!req.file) {
+//         //     return res.status(400).json({ error: "Image is required." });
+//         // }
+
+//         const { name, email, mobile, designation, gender, course } = req.body;
+
+//         // Ensure the course is always an array
+//         const courseArray = Array.isArray(course) ? course : [course];
+
+//         try {
+//             const existingEmployeeByEmail = await Employee.findOne({ email });
+//             const existingEmployeeByMobile = await Employee.findOne({ mobile });
+
+//             // if (existingEmployeeByEmail) {
+//             //     return res.status(400).json({ error: "Employee email already exists." });
+//             // }
+//             // if (existingEmployeeByMobile) {
+//             //     return res.status(400).json({ error: "Mobile number already exists." });
+//             // }
+
+//             // Upload the image to Cloudinary
+        
+//             // const result = await cloudinary.uploader.upload(req.file.path);
+//             const upload = await Upload.uploadFile(req.file.path, {timeout : 60000});
+            
+//             const newEmployee = new Employee({
+//                 name,
+//                 email,
+//                 mobile,
+//                 designation,
+//                 gender,
+//                 course: courseArray,
+//                 image: upload.secure_url
+//             });
+
+//             await newEmployee.save();
+
+//             return res.status(201).json({ message: "Employee created successfully", newEmployee });
+
+//         } catch (error) {
+//             console.log("Error while saving employee:", error);
+//             return res.status(500).json({ message: "Server error, please try again later.", error: error.message });
+//         }
+//     }
+// ];
 
 
 exports.createEmployee = [
 
-  upload.single('image'),
-  body('name').isLength({ min: 1 }).withMessage('Name is required.'),
-  body('email').isEmail().withMessage('Invalid email format.'),
-  body('mobile').isLength({ min: 10 }).withMessage('Mobile number must be at least 10 digits long.'),
-  body('designation').isIn(['HR', 'Manager', 'sales']).withMessage('Invalid designation.'),
-  body('gender').isIn(['Male', 'Female', 'Others']).withMessage('Invalid gender.'),
-  body('course').isIn(['MCA', 'BCA', 'BSC']).withMessage('Invalid course.'),
+    // Express-validator checks for validation (commented in your current version)
+    // upload.single('image'), // Ensure image upload is handled properly
+    body('name').isLength({ min: 1 }).withMessage('Name is required.'),
+    body('email').isEmail().withMessage('Invalid email format.'),
+    body('mobile').isLength({ min: 10 }).withMessage('Mobile number must be at least 10 digits long.'),
+    body('designation').isIn(['HR', 'Manager', 'Sales']).withMessage('Invalid designation.'),
+    body('gender').isIn(['Male', 'Female', 'Others']).withMessage('Invalid gender.'),
+    body('course.*').isIn(['MCA', 'BCA', 'BSC']).withMessage('Invalid course.'),
 
-  async (req, res) => {
-      const errors = validationResult(req);
-      if (!errors.isEmpty()) {
-          return res.status(400).json({ errors: errors.array() });
-      }
+    async (req, res) => {
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            return res.status(400).json({ errors: errors.array() });
+        }
 
-      if (req.fileValidationError) {
-          return res.status(400).json({ error: req.fileValidationError });
-      }
+        // Check if an image is uploaded
+        if (!req.file) {
+            return res.status(400).json({ error: "Image is required." });
+        }
 
-      const { name, email, mobile, designation, gender, course } = req.body;
+        const { name, email, mobile, designation, gender, course } = req.body;
 
-      try {
-          const existingEmployeeByEmail = await Employee.findOne({ email });
-          const existingEmployeeByMobile = await Employee.findOne({ mobile });
+        // Ensure course is always treated as an array
+        const courseArray = Array.isArray(course) ? course : [course];
+        
+        // Upload the image to Cloudinary
+        const upload =  await Upload.uploadFile(req.file.path);
 
-          if (existingEmployeeByEmail) {
-              return res.status(400).json({ error: "Employee email already exists." });
-          }
-          if (existingEmployeeByMobile) {
-              return res.status(400).json({ error: "Mobile number already exists." });
-          }
+        try {
+            // Check for existing employees by email and mobile
+            const existingEmployeeByEmail = await Employee.findOne({ email });
+            const existingEmployeeByMobile = await Employee.findOne({ mobile });
 
-          const newEmployee = new Employee({
-              name,
-              email,
-              mobile,
-              designation,
-              gender,
-              course,
-              image: req.file ? req.file.path : null 
-              // Store file path if uploaded
-          });
+            if (existingEmployeeByEmail) {
+                return res.status(400).json({ error: "Employee email already exists." });
+            }
+            if (existingEmployeeByMobile) {
+                return res.status(400).json({ error: "Mobile number already exists." });
+            }
 
-          await newEmployee.save();
-          return res.status(201).json({ message: "Employee created successfully", newEmployee });
+            if (req.file.size > 5 * 1024 * 1024) { // 5MB limit
+                return res.status(400).json({ error: "File size should not exceed 5MB" });
+            }
+            
+           
+            
+            // Check if the image upload was successful
+            // if (!upload || !upload.secure_url) {
+            //     return res.status(500).json({ error: "Failed to upload image to Cloudinary" });
+            // }
 
-      } catch (error) {
-          console.log("Error while saving employee:", error);
-          return res.status(500).json({ message: "Server error, please try again later.", error: error.message });
-      }
-  }
+            // Create new employee object
+            const newEmployee = new Employee({
+                name,
+                email,
+                mobile,
+                designation,
+                gender,
+                course: courseArray,
+                image: upload.secure_url  // Store the Cloudinary URL
+            });
+
+            // Save the employee data
+            await newEmployee.save();
+
+            return res.status(201).json({ message: "Employee created successfully", newEmployee });
+
+        } catch (error) {
+            console.log("Error while saving employee:", error);
+            return res.status(500).json({ message: "Server error, please try again later.", error: error.message });
+        }
+    }
 ];
+
 
 
 exports.readEmployee = async (req, res) => {
@@ -70,14 +163,14 @@ exports.readEmployee = async (req, res) => {
         if (req.query.gender) filter.gender = req.query.gender;
 
         // Add search filter
-        if (search) {
-            const searchRegex = new RegExp(search, 'i'); // Case-insensitive search
-            filter.$or = [
-                { name: searchRegex },
-                { email: searchRegex },
-                { e_id: searchRegex }
-            ];
-        }
+        // if (search) {
+        //     const searchRegex = new RegExp(search, 'i'); // Case-insensitive search
+        //     filter.$or = [
+        //         { name: searchRegex },
+        //         { email: searchRegex },
+        //         { e_id: searchRegex }
+        //     ];
+        // }
 
         const pageNumber = parseInt(page, 10);
         const limitNumber = parseInt(limit, 10);
@@ -98,8 +191,18 @@ exports.readEmployee = async (req, res) => {
         const totalEmployees = await Employee.countDocuments(filter);
         const totalPages = Math.ceil(totalEmployees / limitNumber);
 
+        // Map employees to include the image URL
+        const employeeData = employees.map(employee => ({
+            ...employee.toObject(),
+            image: employee.image ? 
+            // `http://localhost:4001/images/employeesDp/${employee.image}`
+            `http://localhost:4001/${employee.image}`
+            
+            : null
+        }));
+
         res.status(200).json({
-            data: employees,
+            data: employeeData,
             meta: {
                 totalEmployees,
                 totalPages,
@@ -114,16 +217,15 @@ exports.readEmployee = async (req, res) => {
 
 
 exports.updateEmployee = [
-
-    upload.single('image'),
-  
+    // upload.single('image'),  // Make sure this middleware is included in your route
+    
     body('name').isLength({ min: 1 }).withMessage('Name is required.'),
     body('email').isEmail().withMessage('Invalid email format.'),
     body('mobile').isLength({ min: 10 }).withMessage('Mobile number must be at least 10 digits long.'),
-    body('designation').isIn(['HR', 'Manager', 'sales']).withMessage('Invalid designation.'),
+    body('designation').isIn(['HR', 'Manager', 'Sales']).withMessage('Invalid designation.'),
     body('gender').isIn(['Male', 'Female', 'Others']).withMessage('Invalid gender.'),
-    body('course').isIn(['MCA', 'BCA', 'BSC']).withMessage('Invalid course.'),
-  
+    body('course.*').isIn(['MCA', 'BCA', 'BSC']).withMessage('Invalid course.'), // Validate each course in the array
+    
     async (req, res) => {
       const errors = validationResult(req);
       if (!errors.isEmpty()) {
@@ -136,8 +238,17 @@ exports.updateEmployee = [
   
       const { name, email, mobile, designation, gender, course } = req.body;
   
+      // Check if req.file exists before trying to access its path
+      let uploadUrl;
+      if (req.file) {
+        uploadUrl = await Upload.uploadFile(req.file.path); // Only call upload if file exists
+      }
+  
+      // Ensure the course is always an array
+      const courseArray = Array.isArray(course) ? course : [course];
+  
       try {
-        const existingEmployee = await Employee.findOne({ username: req.params.username });
+        const existingEmployee = await Employee.findById(req.params.id);
         if (!existingEmployee) {
           return res.status(404).json({ error: "Employee not found." });
         }
@@ -157,10 +268,11 @@ exports.updateEmployee = [
         existingEmployee.mobile = mobile;
         existingEmployee.designation = designation;
         existingEmployee.gender = gender;
-        existingEmployee.course = course;
+        existingEmployee.course = courseArray; // Store updated courses as array
   
-        if (req.file) {
-          existingEmployee.image = req.file.path; // Update image path if a new image is uploaded
+        // Update image path if a new image is uploaded
+        if (uploadUrl) {
+          existingEmployee.image = uploadUrl.secure_url; 
         }
   
         await existingEmployee.save();
@@ -172,7 +284,8 @@ exports.updateEmployee = [
         return res.status(500).json({ error: "Server error, please try again later.", error: error.message });
       }
     }
-];
+  ];
+  
   
 
 exports.deleteEmployee = async (req, res) => {
@@ -208,28 +321,6 @@ exports.toggleActiveStatus = async (req, res) => {
 };
 
 
-
-exports.employeeDp = async (req, res) =>  {
-  const filename = req.params.filename;
-  const directoryPath = path.join(__dirname, '../public/images/employeesDp');
-  
-  res.sendFile(`${directoryPath}/${filename}`, (err) => {
-      if (err) {
-          res.status(404).send({ message: 'Image not found' });
-      }
-  });
-};
-
-exports.employeeDpUpload = upload.single('image'), (req, res) => {
-  if (!req.file) {
-      return res.status(400).send({ message: 'No file uploaded' });
-  }
-  
-  res.status(200).send({
-      message: 'Image uploaded successfully!',
-      filePath: `/public/images/employeesDp/${req.file.filename}`
-  });
-}
 
 exports.getSingleEmployee = async(req, res) => {
 

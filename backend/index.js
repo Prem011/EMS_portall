@@ -33,7 +33,7 @@ passport.deserializeUser(Login.deserializeUser())
 
 app.use("/user", userRouter); //user 
 app.use("/employees", employeeRouter); //employees 
-app.use('/public/images/employeesDp', express.static(path.join(__dirname, 'public/images/employeesDp')));
+// app.use('/employeeDp', express.static(path.join(__dirname, 'public/images/employeesDp')));
 
 app.listen(process.env.PORT, ()=>{
     try{

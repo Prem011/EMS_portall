@@ -48,18 +48,21 @@ exports.login = async function(req, res, next){
 
         if(!user) {
           
-          if (info && info.message) {
-              if (info.mesesage === "Missing credentials") {
-                  console.log(info.message);
-                  message = "Please provide both username and password.";
-              } else if (info.message === "Incorrect password") {
-                  console.log(info.message);
-                  message = "The password you entered is incorrect.";
-              } else if (info.message === "No user found with this Username") {
-                  console.log(info.message);
-                  message = "No account found with this username.";
-              }
-          }
+            if (info && info.message) {
+                switch (info.message) {
+                    case "Missing credentials":
+                        message = "Please provide both username and password.";
+                        break;
+                    case "Incorrect password":
+                        message = "The password you entered is incorrect.";
+                        break;
+                    case "No user found with this Username":
+                        message = "No account found with this username.";
+                        break;
+                    default:
+                        message = "Authentication failed due to unknown reasons.";
+                }
+            }
 
           return res.status(401).json({ error: message });
         }
@@ -78,9 +81,6 @@ exports.login = async function(req, res, next){
                 user: {
                     username: user.username,
                     token: token
-
-
-
                 }});
 
 

@@ -16,3 +16,4 @@ const createTokenandSaveCookie = (id, res) => {
 }
 
 module.exports = createTokenandSaveCookie;
+

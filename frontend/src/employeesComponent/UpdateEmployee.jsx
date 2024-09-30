@@ -1,10 +1,8 @@
-
-
-
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate, Navigate } from 'react-router-dom';
 import axios from 'axios';
 import { useForm } from 'react-hook-form';
+import { toast } from 'react-toastify';
 
 const UpdateEmployee = () => {
   const [imagePreview, setImagePreview] = useState(null); // State to hold image preview
@@ -37,6 +35,7 @@ const UpdateEmployee = () => {
     try {
       await axios.post(`/api/employees/updateEmployee/${id}`, data);
       navigate('/employeesDetails'); 
+      toast.success("Employee updated successfully")
     } catch (error) {
       console.error('Error updating employee:', error);
       setServerError('Error updating employee. Please check the details and try again.');
@@ -112,18 +111,22 @@ const UpdateEmployee = () => {
                         {errors.gender && <span className="text-red-500 text-sm">Gender is required</span>}
                     </label>
 
+                    
+                    <label className="block text-white text-sm font-medium mt-5 mb-1">
+                        Select the courses
+                    </label>
                     <label className="input input-bordered flex items-center gap-2 mt-5 mb-1">
                         <select
                             className="grow text-white bg-zinc-700 rounded-lg p-2 outline-none"
                             {...register("course", { required: true })}
+                            multiple // Enable multiple selection
                         >
-                            <option value="" disabled>Select Course</option>
                             <option value="MCA">MCA</option>
                             <option value="BCA">BCA</option>
                             <option value="BSC">BSC</option>
                         </select>
-                        {errors.course && <span className="text-red-500 text-sm">Course is required</span>}
                     </label>
+                    {errors.course && <span className="text-red-500 text-sm">At least one course is required</span>}
 
                     {/* Image Upload Field */}
                     <label className="input input-bordered flex items-center gap-2 mt-5 mb-1">

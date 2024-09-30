@@ -11,9 +11,21 @@ const EmployeesList = () => {
     const fetchEmployees = async () => {
       try {
         const response = await axios.get('/api/employees/employeeData');
-        
-        const employeeData = Array.isArray(response.data.data) ? response.data.data : [];
+
+        // Ensure the image URLs are absolute and handle undefined cases
+         const employeeData = response.data.data.map(employee => {
+           return {
+             ...employee,
+              image: employee.image && employee.image.startsWith('http://localhost:4001/')
+              ? employee.image.replace('http://localhost:4001/', '') // Remove the unwanted prefix
+              : `https://res.cloudinary.com/your-cloud-name/${employee.image || 'default-image.png'}` // Fallback to Cloudinary if image is not defined
+        };
+       });
+
+        // setEmployees(response.data.data);
+        // console.log(response.data.data)
         setEmployees(employeeData);
+        // console.log(employeeData);
       } catch (error) {
         console.error('Error fetching employee data:', error);
       }
@@ -22,12 +34,10 @@ const EmployeesList = () => {
     fetchEmployees();
   }, []);
 
-  
 
   const handleDelete = async (employeeId) => {
     try {
-      const response = await axios.post(`http://localhost:4001/employees/deleteEmployee/${employeeId}`);
-      // console.log('Employee deleted:', response.data);
+      const response = await axios.post(`/api/employees/deleteEmployee/${employeeId}`);
       
       toast.error("Employee Deleted successfully", response.data);
       setEmployees(employees.filter(employee => employee._id !== employeeId));
@@ -35,7 +45,6 @@ const EmployeesList = () => {
       console.error('Error deleting employee:', error.response ? error.response.data : error.message);
     }
   };
-
 
   return (
     <div className='w-screen h-screen bg-zinc-800'>
@@ -48,14 +57,19 @@ const EmployeesList = () => {
           </button>
         </Link>
 
+
+
+        <div className='flex gap-10 items-center text-lg'>
+          <h1 className='text-white'>
+            Employees count :- {employees.length}
+          </h1>
         <input 
           type="text" 
           placeholder="Enter Search Keyword" 
           className="px-3 py-2 rounded-md"
         />
+        </div>
       </div>
-
-     
 
       <div className='px-10 py-4'>
         {employees.length === 0 ? (
@@ -81,10 +95,12 @@ const EmployeesList = () => {
                 <tr key={employee._id || index} className='bg-gray-100'>
                   <td className='border px-4 py-2 text-center'>{employee.eId}</td>
                   <td className='border px-4 py-2'>
+                    
                     <img
-                      src={`http://localhost:4001/images/${employee.image}`} 
+                      src={employee.image} 
                       alt={employee.name}
-                      className='w-12 h-12 object-cover rounded-full'
+                      className='w-16 h-16 rounded-full'
+                      
                     />
                   </td>
                   <td className='border px-4 py-2'>{employee.name}</td>
@@ -92,14 +108,14 @@ const EmployeesList = () => {
                   <td className='border px-4 py-2'>{employee.mobile}</td>
                   <td className='border px-4 py-2'>{employee.designation}</td>
                   <td className='border px-4 py-2'>{employee.gender || 'N/A'}</td>
-                  <td className='border px-4 py-2'>{employee.course}</td>
+                  <td className='border px-4 py-2'>{employee.course.join(', ')}</td>
                   <td className='border px-4 py-2'>{new Date(employee.createdAt).toLocaleDateString()}</td>
                   <td className='border px-4 py-2'>
                     <Link to={`/updateEmployee/${employee._id}`} className="text-blue-500 mr-5">
                       Edit
                     </Link>
                     &nbsp;|&nbsp;
-                    <button className="text-red-500 ml-4" onClick={() => handleDelete(employee._id)} >Delete</button>
+                    <button className="text-red-500 ml-4" onClick={() => handleDelete(employee._id)}>Delete</button>
                   </td>
                 </tr>
               ))}
