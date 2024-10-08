@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+  import React, { useEffect, useState } from 'react';
 import Head from './Head';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
@@ -39,7 +39,7 @@ const EmployeesList = () => {
     try {
       const response = await axios.post(`/api/employees/deleteEmployee/${employeeId}`);
       
-      toast.error("Employee Deleted successfully", response.data);
+      toast.sucess("Employee Deleted successfully", response.data);
       setEmployees(employees.filter(employee => employee._id !== employeeId));
     } catch (error) {
       console.error('Error deleting employee:', error.response ? error.response.data : error.message);
@@ -86,15 +86,16 @@ const EmployeesList = () => {
                 <th className='px-4 py-2'>Designation</th>
                 <th className='px-4 py-2'>Gender</th>
                 <th className='px-4 py-2'>Course</th>
-                <th className='px-4 py-2'>Create Date</th>
-                <th className='px-4 py-2'>Action</th>
+                <th className='px-4 py-2'>Salary</th>
+                <th className='px-4 py-2'>Created Date</th>
+                <th className='px-4 py-2'>Actions</th>
               </tr>
             </thead>
             <tbody>
               {employees.map((employee, index) => (
                 <tr key={employee._id || index} className='bg-gray-100'>
                   <td className='border px-4 py-2 text-center'>{employee.eId}</td>
-                  <td className='border px-4 py-2'>
+                  <td className='border px-4 flex justify-center items-center py-2'>
                     
                     <img
                       src={employee.image} 
@@ -103,19 +104,31 @@ const EmployeesList = () => {
                       
                     />
                   </td>
-                  <td className='border px-4 py-2'>{employee.name}</td>
-                  <td className='border px-4 py-2'>{employee.email}</td>
-                  <td className='border px-4 py-2'>{employee.mobile}</td>
-                  <td className='border px-4 py-2'>{employee.designation}</td>
-                  <td className='border px-4 py-2'>{employee.gender || 'N/A'}</td>
-                  <td className='border px-4 py-2'>{employee.course.join(', ')}</td>
-                  <td className='border px-4 py-2'>{new Date(employee.createdAt).toLocaleDateString()}</td>
-                  <td className='border px-4 py-2'>
-                    <Link to={`/updateEmployee/${employee._id}`} className="text-blue-500 mr-5">
+                  <td className='border px-4 py-2 text-center'>{employee.name}</td>
+                  <td className='border px-4 py-2 text-center'>{employee.email}</td>
+                  <td className='border px-4 py-2 text-center'>{employee.mobile}</td>
+                  <td className='border px-4 py-2 text-center'>{employee.designation}</td>
+                  <td className='border px-4 py-2 text-center'>{employee.gender || 'N/A'}</td>
+                  <td className='border px-4 py-2 text-center'>{employee.course.join(', ')}</td>
+                  <td className='border px-4 py-2 text-center'>{employee.salary}</td>
+                  <td className='border px-4 py-2 text-center'>{new Date(employee.createdAt).toLocaleDateString()}</td>
+
+                  <td className='border  py-2 mx-auto'>
+                    <div className='flex justify-center' >
+                    <Link to={`/updateEmployee/${employee._id}`} className="text-blue-500 mx-1">
                       Edit
                     </Link>
                     &nbsp;|&nbsp;
-                    <button className="text-red-500 ml-4" onClick={() => handleDelete(employee._id)}>Delete</button>
+                    <Link to={`/payroll/${employee._id}`} className="text-blue-500 mx-1">
+                      Payroll
+                    </Link>
+                    &nbsp;|&nbsp;
+                    <Link to={`/attendence/${employee._id}`} className="text-blue-500 mx-1">
+                      Attendence
+                    </Link>
+                    &nbsp;|&nbsp;
+                    <button className="text-red-500 " onClick={() => handleDelete(employee._id)}>Delete</button>
+                    </div>
                   </td>
                 </tr>
               ))}

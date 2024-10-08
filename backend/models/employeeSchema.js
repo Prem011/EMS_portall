@@ -25,7 +25,7 @@ const employeeSchema = new mongoose.Schema({
     },
     designation: {
         type: String,
-        enum: ["HR", "Manager", "sales"],
+        enum: ["HR", "Manager", "Sales"],
         required: true
     },
     gender: {
@@ -34,9 +34,17 @@ const employeeSchema = new mongoose.Schema({
         required: true
     },
     course: {
-        type: [String], 
+        type: [String],
         enum: ["MCA", "BCA", "BSC"],
         required: true
+    },
+    salary: {
+        type: Number,  
+        required: true
+    },
+    hireDate: {
+        type: Date,
+        default: Date.now
     },
     createdAt: {
         type: Date,
@@ -46,9 +54,9 @@ const employeeSchema = new mongoose.Schema({
     timestamps: true
 });
 
-// Auto increment the employee ID (eId)
+// Auto-increment the employee ID (eId)
 employeeSchema.plugin(AutoIncrement, { inc_field: 'eId' });
 
 const Employee = mongoose.model('Employee', employeeSchema);
 
-module.exports = Employee;
+module.exports =   Employee;

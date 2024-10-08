@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
-import { useForm } from 'react-hook-form';
+
 import axios from 'axios';
 import Head from './Head';
 import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
+import { useForm } from 'react-hook-form';
 
 const CreateEmployee = () => {
     const [imagePreview, setImagePreview] = useState(null);
@@ -25,6 +26,7 @@ const CreateEmployee = () => {
             formData.append('mobile', data.mobile);
             formData.append('designation', data.designation);
             formData.append('gender', data.gender);
+            formData.append('salary', data.salary);
 
             // Append each course selected
             data.course.forEach(course => {
@@ -37,7 +39,7 @@ const CreateEmployee = () => {
                 },
             });
 
-            console.log('Employee created successfully:', response.data);
+            // console.log('Employee created successfully:', response.data);
             reset();
             setImagePreview(null);
             toast.success("Employee added successfully");
@@ -68,7 +70,8 @@ const CreateEmployee = () => {
             </button>
 
             <div className='h-[84vh] rounded-md text-white flex justify-center items-center px-6 py-4'>
-                <form onSubmit={handleSubmit(onSubmit)} className='w-[40%] my-2 px-10 py-8 rounded-md border border-spacing-3' encType='multipart/form-data'>
+                <form  onSubmit={handleSubmit(onSubmit)}  className='w-[40%] my-2 px-10 py-8 rounded-md border border-spacing-3' encType='multipart/form-data'>
+                
                     {imagePreview && (
                         <div className="mt-4">
                             <h4 className="text-white mb-2">Image Preview:</h4>
@@ -148,7 +151,7 @@ const CreateEmployee = () => {
                     <label className="input input-bordered flex items-center gap-2 mt-5 mb-1">
                         <select
                             className="grow text-white bg-zinc-700 rounded-lg p-2 outline-none"
-                            {...register("course", { required: true })}
+                            {...register("course", { required: true, minLength: 3 })}
                             multiple // Enable multiple selection
                         >
                             <option value="MCA">MCA</option>
@@ -157,6 +160,16 @@ const CreateEmployee = () => {
                         </select>
                     </label>
                     {errors.course && <span className="text-red-500 text-sm">At least one course is required</span>}
+
+                    <label className="input input-bordered flex items-center gap-2 mt-5 mb-1">
+                        <input
+                            type="text"
+                            className="grow text-white bg-zinc-700 rounded-lg p-2 outline-none"
+                            placeholder="Salary in Rs. only"
+                            {...register("salary", { required: true })}
+                        />
+                    </label>
+                    {errors.salary && <span className="text-red-500 text-sm">Salary is required and should be at least 10000 min</span>}
 
                     <div className='flex justify-center items-center gap-5'>
                         <button type="submit" className='w-20 h-10 mt-5 text-white rounded-md bg-blue-600 hover:bg-blue-800 border-0 p-2'>

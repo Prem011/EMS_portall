@@ -2,11 +2,18 @@ import React from 'react'
 import Register from './Components/Register'
 import Login from './Components/Login'
 import {Routes, Route, Navigate} from 'react-router-dom'
-import Dashboard from './employeesComponent/Dashboard'
-import EmployeesList from './employeesComponent/EmployeesList'
-import CreateEmployee from './employeesComponent/CreateEmployee'
-import UpdateEmployee from './employeesComponent/UpdateEmployee'
+import Dashboard from './employeesComponents/Dashboard'
+import EmployeesList from './employeesComponents/EmployeesList'
+import CreateEmployee from './employeesComponents/CreateEmployee'
+import UpdateEmployee from './employeesComponents/UpdateEmployee'
 import { useAuth } from './context/AuthProvider'
+import PayrollList from './payrollComponents/PayrollList'
+import Attendence from './employeesComponents/Attendence'
+import CreatePayroll from './payrollComponents/CreatePayroll'
+import UpdatePayroll from './payrollComponents/UpdatePayroll'
+import UpdateAttendence from './attendenceComponents/UpdateAttendence'
+import CreateAttendence from './attendenceComponents/CreateAttendence';
+import ReadAttendance from './attendenceComponents/ReadAttendence'
 
 const ProtectedRoute = ({ element, ...rest }) => {
     const { authUser } = useAuth();
@@ -41,6 +48,30 @@ const App = () => {
             <Route
                 path='/updateEmployee/:id'
                 element={<ProtectedRoute element={<UpdateEmployee />} />}
+            />
+            <Route
+                path='/payroll/:id'
+                element={<ProtectedRoute element={<PayrollList />} />}
+            />
+            <Route
+                path='/createPayroll/:id'
+                element={<ProtectedRoute element={<CreatePayroll/>} />}
+            />
+            <Route
+                path='/updatePayroll/:id'
+                element={<ProtectedRoute element={<UpdatePayroll/>} />}
+            />
+            <Route
+                path='/attendence/:id'
+                element={<ProtectedRoute element={<ReadAttendance />} />}
+            />
+            <Route
+                path='/createAttendance/:id'
+                element={<ProtectedRoute element={<CreateAttendence/>} />}
+            />
+            <Route
+                path='/updateAttendance/:id'
+                element={<ProtectedRoute element={<UpdateAttendence/>} />}
             />
         </Routes>
     );

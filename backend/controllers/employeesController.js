@@ -97,7 +97,7 @@ exports.createEmployee = [
             return res.status(400).json({ error: "Image is required." });
         }
 
-        const { name, email, mobile, designation, gender, course } = req.body;
+        const { name, email, mobile, designation, gender, course, salary ,hireDate } = req.body;
 
         // Ensure course is always treated as an array
         const courseArray = Array.isArray(course) ? course : [course];
@@ -136,7 +136,9 @@ exports.createEmployee = [
                 designation,
                 gender,
                 course: courseArray,
-                image: upload.secure_url  // Store the Cloudinary URL
+                image: upload.secure_url,  // Store the Cloudinary URL
+                salary,
+                hireDate
             });
 
             // Save the employee data

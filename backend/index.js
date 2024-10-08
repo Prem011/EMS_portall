@@ -3,6 +3,8 @@ const express = require('express')
 const morgan = require('morgan');
 const userRouter = require("./routes/userRoutes");
 const employeeRouter = require("./routes/employeeRoutes")
+const payrollRoutes = require("./routes/payrollRoutes");
+const attendenceRoutes = require("./routes/attendenceRoutes");
 const passport = require('passport')
 const session = require('express-session');
 const cors = require('cors')
@@ -33,7 +35,8 @@ passport.deserializeUser(Login.deserializeUser())
 
 app.use("/user", userRouter); //user 
 app.use("/employees", employeeRouter); //employees 
-// app.use('/employeeDp', express.static(path.join(__dirname, 'public/images/employeesDp')));
+app.use("/payroll", payrollRoutes); //payroll 
+app.use("/attendence", attendenceRoutes); //attendence  
 
 app.listen(process.env.PORT, ()=>{
     try{

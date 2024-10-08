@@ -12,17 +12,14 @@ const {createEmployee
     , updateEmployee
     , deleteEmployee
     , toggleActiveStatus
-    , employeeDp
-    , employeeDpUpload
     , getSingleEmployee
-    , uploadIMG
     } = require("../controllers/employeesController");
 
 const upload = require('../utils/multer');
 
-router.post("/createEmployee", uploader.single("image"), createEmployee)
+router.post("/createEmployee",isLoggedIn, uploader.single("image"), createEmployee)
 
-router.get("/employeeData", readEmployee)
+router.get("/employeeData",isLoggedIn, readEmployee)
 
 router.get("/updateEmployee/:id", getSingleEmployee);
 
