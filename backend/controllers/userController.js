@@ -32,7 +32,7 @@ exports.register =  async function(req, res, next){
 
     }
     catch(err){
-        // console.log("Error in registering user: " + err);
+        console.log("Error in registering user: " + err);
             res.status(500).send({error: 'An error occurred while registering user, please try again'});
     }
 }
@@ -70,7 +70,7 @@ exports.login = async function(req, res, next){
 
         req.login(user, (err) => {
             if(err) {
-                // console.log("Error in login: " + err);
+                console.log("Error in login: " + err);
                 return res.status(500).send({error: 'An error occurred while logging in, please try again'});
             }
 
