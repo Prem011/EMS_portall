@@ -32,7 +32,7 @@ exports.register =  async function(req, res, next){
 
     }
     catch(err){
-        console.log("Error in registering user: " + err);
+        // console.log("Error in registering user: " + err);
             res.status(500).send({error: 'An error occurred while registering user, please try again'});
     }
 }
@@ -40,11 +40,11 @@ exports.register =  async function(req, res, next){
 exports.login = async function(req, res, next){
     passport.authenticate('local', (err, user, info) => {
         if(err) {
-            console.log("Error in login: " + err);
+            // console.log("Error in login: " + err);
             return res.status(500).send({message: 'An error occurred while logging in, please try again'});
         }
 
-        console.log(user)
+        // console.log(user)
 
         if(!user) {
           
@@ -70,7 +70,7 @@ exports.login = async function(req, res, next){
 
         req.login(user, (err) => {
             if(err) {
-                console.log("Error in login: " + err);
+                // console.log("Error in login: " + err);
                 return res.status(500).send({error: 'An error occurred while logging in, please try again'});
             }
 
@@ -93,7 +93,7 @@ exports.logout = function(req, res) {
         res.clearCookie("jwt");
         res.status(200).json({ message: "User Logged out!" });
     } catch (err) {
-        console.log(err);
+        // console.log(err);
         res.status(500).json({ error: "Internal Server Error" });
     }
   };

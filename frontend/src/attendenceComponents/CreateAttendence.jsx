@@ -13,7 +13,7 @@ const CreateAttendance = () => {
 
 
     const onSubmit = async (attendance) => {
-        console.log(attendance); // Inspect the form data
+        // console.log(attendance); // Inspect the form data
     
         try {
             const attendanceData = {
@@ -26,7 +26,7 @@ const CreateAttendance = () => {
     
             const response = await axios.post("/api/attendence/createAttendence", attendanceData);
     
-            console.log('Attendance created successfully: ', response.data);
+            // console.log('Attendance created successfully: ', response.data);
             reset(); 
             toast.success("Attendance created successfully");
             navigate(-1); 

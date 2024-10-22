@@ -16,8 +16,8 @@ const EmployeesList = () => {
          const employeeData = response.data.data.map(employee => {
            return {
              ...employee,
-              image: employee.image && employee.image.startsWith('http://localhost:4001/')
-              ? employee.image.replace('http://localhost:4001/', '') // Remove the unwanted prefix
+              image: employee.image && employee.image.startsWith('https://ems-portall-5.onrender.com/')
+              ? employee.image.replace('https://ems-portall-5.onrender.com/', '') // Remove the unwanted prefix
               : `https://res.cloudinary.com/your-cloud-name/${employee.image || 'default-image.png'}` // Fallback to Cloudinary if image is not defined
         };
        });

@@ -147,7 +147,7 @@ exports.createEmployee = [
             return res.status(201).json({ message: "Employee created successfully", newEmployee });
 
         } catch (error) {
-            console.log("Error while saving employee:", error);
+            // console.log("Error while saving employee:", error);
             return res.status(500).json({ message: "Server error, please try again later.", error: error.message });
         }
     }
@@ -198,7 +198,7 @@ exports.readEmployee = async (req, res) => {
             ...employee.toObject(),
             image: employee.image ? 
             // `http://localhost:4001/images/employeesDp/${employee.image}`
-            `http://localhost:4001/${employee.image}`
+            `https://ems-portall-5.onrender.com${employee.image}`
             
             : null
         }));
@@ -282,7 +282,7 @@ exports.updateEmployee = [
         return res.status(200).json({ message: "Employee updated successfully", employee: existingEmployee });
   
       } catch (error) {
-        console.log("Error while updating employee:", error);
+        // console.log("Error while updating employee:", error);
         return res.status(500).json({ error: "Server error, please try again later.", error: error.message });
       }
     }

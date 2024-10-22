@@ -14,7 +14,7 @@ const Attendence = () => {
           try {
             const response = await axios.get(`/api/attendence/readAttendence/${id}`);             
             setPayroll(response.data);
-            console.log(response.data);
+            // console.log(response.data);
           } catch (error) {
             console.error('Error fetching employee data:', error);
           }

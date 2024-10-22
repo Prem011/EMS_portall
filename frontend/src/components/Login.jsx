@@ -31,7 +31,7 @@
 
                 } else {
                     toast.error('Unexpected response from the server');
-                    console.log('Unexpected response from the server');
+                    // console.log('Unexpected response from the server');
                 }
             } catch (error) {
                 if (error.response) {
@@ -44,7 +44,7 @@
                     toast.error('No response received from server. Please try again.');
                 } else {
                     toast.error("error occurred");
-                    console.log(error);
+                    // console.log(error);
                 }
             }
         };
