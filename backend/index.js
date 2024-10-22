@@ -17,6 +17,10 @@ const path = require("path");
 const app = express();
 
 app.use(cors());
+// app.use(cors({
+//     origin: 'https://ems-portall.vercel.app', // Allow only this origin
+//     credentials: true, // Allow credentials (if you're using cookies)
+// }));
 app.use(cookieParser());
 app.use(express.json());
 app.use(morgan('dev'));
