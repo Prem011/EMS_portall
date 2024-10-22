@@ -1,6 +1,6 @@
 import React from 'react'
-import Register from './Components/Register'
-import Login from './Components/Login'
+import Register from './components/Register'
+import Login from './components/Login'
 import {Routes, Route, Navigate} from 'react-router-dom'
 import Dashboard from './employeesComponents/Dashboard'
 import EmployeesList from './employeesComponents/EmployeesList'

@@ -13,14 +13,15 @@ const EmployeesList = () => {
         const response = await axios.get('/api/employees/employeeData');
 
         // Ensure the image URLs are absolute and handle undefined cases
-         const employeeData = response.data.data.map(employee => {
-           return {
-             ...employee,
+        const employeeData = response.data.data.map(employee => {
+          return {
+              ...employee,
               image: employee.image && employee.image.startsWith('https://ems-portall-5.onrender.com/')
-              ? employee.image.replace('https://ems-portall-5.onrender.com/', '') // Remove the unwanted prefix
-              : `https://res.cloudinary.com/your-cloud-name/${employee.image || 'default-image.png'}` // Fallback to Cloudinary if image is not defined
-        };
-       });
+                  ? employee.image.replace('https://ems-portall-5.onrender.com/', '') // Remove the unwanted prefix
+                  : `https://res.cloudinary.com/your-cloud-name/${employee.image || 'default-image.png'}` // Fallback to Cloudinary if image is not defined
+          };
+        });
+      
 
         // setEmployees(response.data.data);
         // console.log(response.data.data)
