@@ -2,7 +2,7 @@
     import { useForm } from 'react-hook-form';
     import { Link } from 'react-router-dom';
     import { useAuth } from '../context/AuthProvider';
-    import axios from 'axios';
+    import axios from '../utils/axios';
     import { toast } from 'react-toastify';
     import Cookies from "js-cookie"
 

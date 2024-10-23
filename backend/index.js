@@ -18,7 +18,7 @@ const app = express();
 
 // app.use(cors());
 app.use(cors({
-    origin: 'https://ems-portal-ftkyijuoo-prem011s-projects.vercel.app/', // Allow only this origin
+    origin: 'https://ems-portall.onrender.com', // Allow only this origin
     credentials: true, // Allow credentials (if you're using cookies)
 }));
 // app.use(cors({
