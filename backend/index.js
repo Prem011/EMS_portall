@@ -16,11 +16,11 @@ const path = require("path");
 
 const app = express();
 
-// app.use(cors());
-app.use(cors({
-    origin: 'https://ems-portall.onrender.com', // Allow only this origin
-    credentials: true, // Allow credentials (if you're using cookies)
-}));
+app.use(cors());
+// app.use(cors({
+//     origin: 'https://ems-portall.onrender.com', // Allow only this origin
+//     credentials: true, // Allow credentials (if you're using cookies)
+// }));
 // app.use(cors({
 //     origin: 'http://192.168.1.4:8080', // Your frontend origin
 //     methods: ['POST', 'GET'], // Allow specific methods
