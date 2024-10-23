@@ -17,7 +17,11 @@ const Register = () => {
         };
 
         try {
-            const response = await axios.post('/api/user/register', userInfo);
+            const response = await axios.post('http://192.168.1.4:8080/api/user/register', userInfo, {
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
 
             if (response.status === 200) {
                 toast.success('Signup successful');

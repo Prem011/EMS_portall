@@ -16,10 +16,14 @@ const path = require("path");
 
 const app = express();
 
-app.use(cors());
+// app.use(cors());
+app.use(cors({
+    origin: 'https://ems-portal-ftkyijuoo-prem011s-projects.vercel.app/', // Allow only this origin
+    credentials: true, // Allow credentials (if you're using cookies)
+}));
 // app.use(cors({
-//     origin: 'https://ems-portall.vercel.app', // Allow only this origin
-//     credentials: true, // Allow credentials (if you're using cookies)
+//     origin: 'http://192.168.1.4:8080', // Your frontend origin
+//     methods: ['POST', 'GET'], // Allow specific methods
 // }));
 app.use(cookieParser());
 app.use(express.json());
