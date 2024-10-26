@@ -1,5 +1,5 @@
-const express = require('express');
 const Payroll = require('../models/payrollSchema'); // Assuming the Payroll model is exported from the Employee file
+const Employee = require("../models/employeeSchema")
 
 exports.createPayroll = async (req, res) => {
     try {
@@ -77,3 +77,20 @@ exports.getSinglePayroll = async(req, res) => {
   }
 
 }
+
+
+exports.getSalaryForPayroll = async (req, res) => {
+    try {
+        const employee = await Employee.findById(req.params.employeeId);
+        
+        if (!employee) {
+            return res.status(404).json({ message: 'Employee not found' });
+        }
+        
+        const salary = employee.salary;
+        
+        res.status(200).json({ message: 'Employee salary retrieved', salary });
+    } catch (error) {
+        res.status(500).json({ message: 'Error retrieving salary', error: error.message });
+    }
+};

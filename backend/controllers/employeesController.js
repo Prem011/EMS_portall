@@ -197,8 +197,8 @@ exports.readEmployee = async (req, res) => {
         const employeeData = employees.map(employee => ({
             ...employee.toObject(),
             image: employee.image ? 
-            // `http://localhost:4001/images/employeesDp/${employee.image}`
-            `https://ems-portall-5.onrender.com${employee.image}`
+            `${employee.image}`
+            // `https://ems-portall-5.onrender.com${employee.image}`
             
             : null
         }));

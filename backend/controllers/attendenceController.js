@@ -1,5 +1,4 @@
 const Attendance = require('../models/attendenceSchema');
-const mongoose = require('mongoose');
 
 exports.createAttendence = async (req, res) => {
     try {

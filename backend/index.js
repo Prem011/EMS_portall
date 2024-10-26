@@ -16,15 +16,13 @@ const path = require("path");
 
 const app = express();
 
-app.use(cors());
-// app.use(cors({
-//     origin: 'https://ems-portall.onrender.com', // Allow only this origin
-//     credentials: true, // Allow credentials (if you're using cookies)
-// }));
-// app.use(cors({
-//     origin: 'http://192.168.1.4:8080', // Your frontend origin
-//     methods: ['POST', 'GET'], // Allow specific methods
-// }));
+// app.use(cors());
+app.use(cors({
+    origin: 'http://localhost:5173', // Allow requests from this specific origin
+    methods: ['GET', 'POST', 'PUT', 'DELETE'], // Specify allowed methods if needed
+    credentials: true // Allow cookies if required
+  }));
+
 app.use(cookieParser());
 app.use(express.json());
 app.use(morgan('dev'));
@@ -44,6 +42,16 @@ app.use("/user", userRouter); // user
 app.use("/employees", employeeRouter); // employees
 app.use("/payroll", payrollRoutes); // payroll
 app.use("/attendence", attendenceRoutes); // attendence
+
+//code for deployment
+if(process.env.NODE_ENV !== 'production'){
+    const dirPath = path.resolve();
+
+    app.use(express.static('./frontend/dist'));
+    app.get('*', (req, res) => {
+        res.sendFile(path.resolve(dirPath, 'frontend', 'dist', 'index.html'));
+    })
+}
 
 const PORT = process.env.PORT || 3000;
 // app.listen(PORT, () => {
