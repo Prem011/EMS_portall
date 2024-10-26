@@ -50,7 +50,7 @@ if(process.env.NODE_ENV !== 'production'){
 
     app.use(express.static('./frontend/dist'));
     app.get('*', (req, res) => {
-        res.sendFile(path.resolve(dirPath, 'frontend', 'dist', 'index.html'));
+        res.sendFile(path.resolve(dirPath, './frontend/dist', 'index.html'));
     })
 }
 
