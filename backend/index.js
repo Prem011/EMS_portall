@@ -18,7 +18,8 @@ const app = express();
 
 // app.use(cors());
 app.use(cors({
-    origin: 'http://localhost:5173', // Allow requests from this specific origin
+    // origin: 'http://localhost:5173', // Allow requests from this specific origin
+    origin: 'https://ems-portall.onrender.com', // Allow requests from this specific origin
     methods: ['GET', 'POST', 'PUT', 'DELETE'], // Specify allowed methods if needed
     credentials: true // Allow cookies if required
   }));
